@@ -90,6 +90,8 @@ public class RukudanActivity extends AppCompatActivity {
 
         queue = Volley.newRequestQueue(this);
 
+        initStorage();
+
         ticket_id = getIntent().getStringExtra("rukudan");
         getDetail(ticket_id);
 
