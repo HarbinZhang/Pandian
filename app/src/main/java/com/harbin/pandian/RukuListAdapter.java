@@ -2,6 +2,9 @@ package com.harbin.pandian;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,14 +13,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONArray;
+import com.harbin.pandian.database.RukuListContract;
+import com.harbin.pandian.database.RukuListDbHelper;
 
 public class RukuListAdapter extends RecyclerView.Adapter<RukuListAdapter.ViewHolder> {
 
 //    private String[] mDataset;
-    private JSONArray mDataset;
 
     private Context context;
+
+
+    private SQLiteDatabase mDb;
+    private Cursor cursor;
+
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -41,8 +50,13 @@ public class RukuListAdapter extends RecyclerView.Adapter<RukuListAdapter.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RukuListAdapter(JSONArray myDataset) {
-        mDataset = myDataset;
+    public RukuListAdapter(Context context, Cursor cursor){
+        this.context = context;
+        this.cursor = cursor;
+
+        RukuListDbHelper dbHelper = new RukuListDbHelper(context);
+        mDb = dbHelper.getWritableDatabase();
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -66,20 +80,33 @@ public class RukuListAdapter extends RecyclerView.Adapter<RukuListAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        try{
-            final String id = mDataset.getJSONObject(position).getString("id").toString();
-            final String provider = mDataset.getJSONObject(position).getString("supplier_name").toString();
-            final String createTime = mDataset.getJSONObject(position).getString("create_time").toString();
-            final String creator = mDataset.getJSONObject(position).getString("creator_name").toString();
-            final String store = mDataset.getJSONObject(position).getString("store_name").toString();
-            final String serial_number = mDataset.getJSONObject(position).getString("serial_number").toString();
 
-            holder.tv_id.setText(id);
-            holder.tv_provider.setText(provider);
-            holder.tv_createTime.setText(createTime);
-            holder.tv_creator.setText(creator);
-            holder.tv_store.setText(store);
-            holder.tv_serialNumber.setText(serial_number);
+        if(!cursor.moveToPosition(position)){
+            return;
+        }
+
+        final String id = cursor.getString(cursor.getColumnIndex(RukuListContract.RukuListEntry.COLUMN_ID));
+        final String provider = cursor.getString(cursor.getColumnIndex(RukuListContract.RukuListEntry.COLUMN_SUPPLIER_NAME));
+        final String createTime = cursor.getString(cursor.getColumnIndex(RukuListContract.RukuListEntry.COLUMN_CREATE_TIME));
+        final String creator = cursor.getString(cursor.getColumnIndex(RukuListContract.RukuListEntry.COLUMN_CREATOR_NAME));
+        final String store = cursor.getString(cursor.getColumnIndex(RukuListContract.RukuListEntry.COLUMN_STORE_NAME));
+        final String serial_number = cursor.getString(cursor.getColumnIndex(RukuListContract.RukuListEntry.COLUMN_SERIAL_NUMBER));
+        final int done = cursor.getInt(cursor.getColumnIndex(RukuListContract.RukuListEntry.COLUMN_DONE));
+        final long Sqlid = cursor.getLong(cursor.getColumnIndex(RukuListContract.RukuListEntry._ID));
+
+        holder.tv_id.setText(id);
+        holder.tv_provider.setText(provider);
+        holder.tv_createTime.setText(createTime);
+        holder.tv_creator.setText(creator);
+        holder.tv_store.setText(store);
+        holder.tv_serialNumber.setText(serial_number);
+
+        if (done == 1){
+            holder.cardView.setCardBackgroundColor(Color.GRAY);
+        }
+
+
+        try{
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,6 +114,7 @@ public class RukuListAdapter extends RecyclerView.Adapter<RukuListAdapter.ViewHo
                     try{
                         Intent intent = new Intent(context, RukudanActivity.class);
 //                        intent.putExtra("rukudan", mDataset.getJSONObject(position).getString("detail").toString());
+                        intent.putExtra("rukudanSqlId", Sqlid);
                         intent.putExtra("rukudan", id);
                         context.startActivity(intent);
 
@@ -125,7 +153,18 @@ public class RukuListAdapter extends RecyclerView.Adapter<RukuListAdapter.ViewHo
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length();
+        return cursor.getCount();
     }
+
+    public void swapCursor(Cursor newCursor){
+        if(cursor != null) cursor.close();
+        cursor = newCursor;
+        if(newCursor != null) {
+            this.notifyDataSetChanged();
+        }
+    }
+
+
+
 }
 

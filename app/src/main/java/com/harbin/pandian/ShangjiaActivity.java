@@ -54,7 +54,7 @@ public class ShangjiaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shangjia);
 
-        setTitle("上架");
+        setTitle("shangjia");
 
         loadingBar = (ContentLoadingProgressBar) findViewById(R.id.loading_shangjia);
         loadingBar.show();

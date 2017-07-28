@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -62,6 +63,8 @@ public class GoodsActivity extends ShangjiaActivity {
     private String rack_name, rack_code;
 
     private Context context;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +80,8 @@ public class GoodsActivity extends ShangjiaActivity {
         et_quantity = (EditText) findViewById(R.id.et_goods_quantity);
         et_quantity.setText(getIntent().getStringExtra("quantity"));
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.bar_goods);
 
 
 
@@ -261,7 +266,7 @@ public class GoodsActivity extends ShangjiaActivity {
                                         array.getJSONObject(i).getString("data_value"));
                             }
                             setUnits();
-                            loadingBar.hide();
+//                            loadingBar.hide();
                         }catch (Exception e){
                             Log.e("Error: ", e.getMessage());
                         }

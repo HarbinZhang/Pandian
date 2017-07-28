@@ -1,6 +1,7 @@
 package com.harbin.pandian;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +32,8 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.harbin.pandian.database.GoodsContract;
 import com.harbin.pandian.database.GoodsDbHelper;
+import com.harbin.pandian.database.RukuListContract;
+import com.harbin.pandian.database.RukuListDbHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -60,22 +64,36 @@ public class RukudanActivity extends AppCompatActivity {
 
     private ContentLoadingProgressBar loadingBar;
 
+
+    private SQLiteDatabase rukulistDb;
+    private RukuListAdapter listAdapter;
+
+
+    private Context context;
+
+    String ticket_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rukudan);
 
-        setTitle("入库单明细");
+//        setTitle("入库单明细");
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.bar_rukudan);
+
 
         loadingBar = (ContentLoadingProgressBar) findViewById(R.id.loading_rukudan);
         loadingBar.show();
 
         queue = Volley.newRequestQueue(this);
 
-        String ticket_id = getIntent().getStringExtra("rukudan");
+        ticket_id = getIntent().getStringExtra("rukudan");
         getDetail(ticket_id);
 
         tv_loc_code = (TextView) findViewById(R.id.tv_rukudan_loc_code);
+
+        context = this;
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -95,6 +113,11 @@ public class RukudanActivity extends AppCompatActivity {
         GoodsDbHelper dbHelper = new GoodsDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
         mDb.delete(GoodsContract.GoodsEntry.TABLE_NAME, null, null);
+
+
+        RukuListDbHelper dbHelper1 = new RukuListDbHelper(this);
+        rukulistDb = dbHelper1.getWritableDatabase();
+
 //
 //        try{
 //
@@ -124,8 +147,7 @@ public class RukudanActivity extends AppCompatActivity {
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), BasicInfo.class);
-                startActivity(intent);
+            rukudan_submit();
             }
         });
 
@@ -213,22 +235,24 @@ public class RukudanActivity extends AppCompatActivity {
                             JSONArray array = resultObj.getJSONArray("result");
                             for(int i = 0; i<array.length(); i++){
                                 JSONObject it = array.getJSONObject(i);
-                                addNewGoods(it.getString("checkin_ticket"),
-                                        it.getString("merchandise"),
-                                        it.getString("m_name"),
-                                        it.getString("quantity"),
-                                        it.getString("unit"),
-                                        it.getString("loc_name"),
-                                        it.getString("certificate_code"),
-                                        it.getString("model"),
-                                        it.getString("loc_code"),
-                                        it.getString("acceptence_quantity"),
-                                        it.getString("total_price"),
-                                        it.getString("production_batch_number"),
-                                        it.getString("production_date"),
-                                        it.getString("effective_date"),
-                                        it.getString("manufacturer")
-                                );
+                                if(!isExist(it.getString("checkin_ticket"))) {
+                                    addNewGoods(it.getString("checkin_ticket"),
+                                            it.getString("merchandise"),
+                                            it.getString("m_name"),
+                                            it.getString("quantity"),
+                                            it.getString("unit"),
+                                            it.getString("loc_name"),
+                                            it.getString("certificate_code"),
+                                            it.getString("model"),
+                                            it.getString("loc_code"),
+                                            it.getString("acceptence_quantity"),
+                                            it.getString("total_price"),
+                                            it.getString("production_batch_number"),
+                                            it.getString("production_date"),
+                                            it.getString("effective_date"),
+                                            it.getString("manufacturer")
+                                    );
+                                }
                             }
 
                             mAdapter.swapCursor(getAllGoods());
@@ -346,6 +370,52 @@ public class RukudanActivity extends AppCompatActivity {
                     }
                 });
         queue.add(getRequest);
+    }
+
+
+    public void rukudan_submit(){
+        if(!allThingsDone()){
+            Toast.makeText(context, "请更新完每个入库单明细", Toast.LENGTH_LONG).show();
+        }else{
+            Long sqlId = getIntent().getLongExtra("rukudanSqlId", 0);
+            ContentValues cv = new ContentValues();
+            cv.put("done", 1);
+            rukulistDb.update(RukuListContract.RukuListEntry.TABLE_NAME,
+                    cv,
+                    RukuListContract.RukuListEntry._ID + " = " + sqlId,
+                    null);
+            Toast.makeText(context, "提交成功", Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    private boolean allThingsDone(){
+        Cursor undone_cursor = mDb.query(GoodsContract.GoodsEntry.TABLE_NAME,
+                null,
+                GoodsContract.GoodsEntry.COLUMN_DONE + " = 0 ",
+                null,
+                null,
+                null,
+                null);
+        int cnt = undone_cursor.getCount();
+        return (cnt==0);
+    }
+
+    private boolean isExist(String id){
+//        Cursor cursor = mDb.query(
+//                GoodsContract.GoodsEntry.TABLE_NAME,
+//                null,
+//                GoodsContract.GoodsEntry.COLUMN_ID + " = " + id,
+//                null,
+//                null,
+//                null,
+//                null);
+//
+//        int cnt = cursor.getCount();
+//        return (cnt == 1);
+
+
+        return false;
     }
 
 }

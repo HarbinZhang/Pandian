@@ -1,0 +1,79 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.harbin.pandian.MainFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/lightYellow"
+        android:padding="10dp">
+
+
+        <ImageButton
+            android:id="@+id/ibtn_main_ruku"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/holo_blue_dark"
+            android:onClick="toStart"
+            android:src="@drawable/ruku"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView4"
+            android:layout_alignBottom="@+id/textView4"
+            android:layout_alignEnd="@+id/ibtn_main_ruku"
+            android:layout_alignLeft="@+id/ibtn_main_ruku"
+            android:layout_alignRight="@+id/ibtn_main_ruku"
+            android:layout_alignStart="@+id/ibtn_main_ruku"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center"
+            android:text="入库"
+            android:textSize="18sp" />
+
+
+        <ImageButton
+            android:id="@+id/ibtn_main_shangjia"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp"
+            android:layout_toEndOf="@+id/ibtn_main_ruku"
+            android:layout_toRightOf="@+id/ibtn_main_ruku"
+            android:background="@android:color/holo_blue_dark"
+            android:onClick="toShangjia"
+            android:src="@drawable/shangjia"
+            tools:layout_editor_absoluteX="132dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/ibtn_main_shangjia"
+            android:layout_alignLeft="@+id/ibtn_main_shangjia"
+            android:layout_alignRight="@+id/ibtn_main_shangjia"
+            android:layout_alignStart="@+id/ibtn_main_shangjia"
+            android:layout_below="@+id/ibtn_main_shangjia"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="上架"
+            android:textSize="18sp" />
+
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>
