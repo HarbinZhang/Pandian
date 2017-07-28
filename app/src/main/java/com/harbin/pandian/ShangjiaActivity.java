@@ -126,7 +126,7 @@ public class ShangjiaActivity extends AppCompatActivity {
                             JSONObject jsonObj = new JSONObject(response);
                             String form = jsonObj.getString("result");
                             intent.putExtra("response", form);
-//                            Log.d("info:",form);
+//                            LogFragment.d("info:",form);
                             startActivity(intent);
                         }catch (Exception e){
 

@@ -1,8 +1,10 @@
 package com.harbin.pandian;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.navigation_log:
 //                    mTextMessage.setText(R.string.title_dashboard);
-                    fragment = new AccountFragment();
+                    fragment = new LogFragment();
                     break;
                 case R.id.navigation_account:
 //                    mTextMessage.setText(R.string.title_notifications);
@@ -110,17 +113,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void toShangjia(View view){
-        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.image_click));
-        startActivity(new Intent(this, RukuListActivity.class));
-        return;
 
-//        if(prefs.getBoolean("login_status", false)){
-//            Intent intent = new Intent(context, RukuListActivity.class);
-//            startActivity(intent);
-//        }else{
+    public void toStart(View view){
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.image_click));
+//        startActivity(new Intent(this, RukuListActivity.class));
+        Toast.makeText(this, "功能开发中", Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+
+
+    public void toLogin(){
+        new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+    }
+
+
+
+    public void toShangjia(View view){
+//        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.image_click));
+//        startActivity(new Intent(this, RukuListActivity.class));
+//        return;
+
+        if(prefs.getBoolean("login_status", false)){
+            Intent intent = new Intent(context, RukuListActivity.class);
+            startActivity(intent);
+        }else{
 //            Toast.makeText(context, "请先登录", Toast.LENGTH_LONG).show();
-//        }
+            loginAlert(this);
+        }
 
     }
 
@@ -129,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, final int resultCode, Intent data) {
         final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
-            if(result.getContents() != null) {
+            if(result.getContents() == null) {
                 Toast.makeText(this, "取消", Toast.LENGTH_SHORT).show();
             } else {
 //                loadingBar.show();
@@ -157,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                                         editor.putBoolean("login_status", true);
                                         editor.apply();
 //                                        loadingBar.hide();
+                                        mBottomNav.setSelectedItemId(R.id.navigation_home);
                                         Toast.makeText(context, "登录成功： 欢迎 " + userObj.getString("user_name"), Toast.LENGTH_SHORT).show();
                                     }
                                 }catch (Exception e){
@@ -178,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     {
                         Map<String, String>  params = new HashMap<String, String>();
                         params.put("employee_code",result.getContents());
-//                        params.put("employee_code", String.valueOf(1610024));
+//                        params.put("employee_code_right", String.valueOf(1610024));
                         Log.d("params: ", params.toString());
                         return params;
                     }
@@ -191,6 +212,33 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+
+    private void loginAlert(Context context){
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(context);
+        }
+
+//        builder = new AlertDialog.Builder(context);
+        builder.setTitle("请先登录")
+                .setMessage("您还没有登录，现在扫码登录吗？")
+                .setPositiveButton("好的", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        toLogin();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
 

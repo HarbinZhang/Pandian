@@ -2,78 +2,477 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorButtonNormal"
     tools:context="com.harbin.pandian.MainFragment">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/lightYellow"
-        android:padding="10dp">
+        android:layout_height="400dp"
+        android:paddingTop="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
 
 
-        <ImageButton
-            android:id="@+id/ibtn_main_ruku"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/holo_blue_dark"
-            android:onClick="toStart"
-            android:src="@drawable/ruku"
-            tools:layout_editor_absoluteY="16dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textView4"
-            android:layout_alignBottom="@+id/textView4"
-            android:layout_alignEnd="@+id/ibtn_main_ruku"
-            android:layout_alignLeft="@+id/ibtn_main_ruku"
-            android:layout_alignRight="@+id/ibtn_main_ruku"
-            android:layout_alignStart="@+id/ibtn_main_ruku"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center"
-            android:text="入库"
-            android:textSize="18sp" />
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
 
 
-        <ImageButton
-            android:id="@+id/ibtn_main_shangjia"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp"
-            android:layout_toEndOf="@+id/ibtn_main_ruku"
-            android:layout_toRightOf="@+id/ibtn_main_ruku"
-            android:background="@android:color/holo_blue_dark"
-            android:onClick="toShangjia"
-            android:src="@drawable/shangjia"
-            tools:layout_editor_absoluteX="132dp"
-            tools:layout_editor_absoluteY="16dp" />
+                <ImageButton
+                    android:id="@+id/ibtn_main_ruku"
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toStart"
+                    android:src="@drawable/ruku"
+                    tools:layout_editor_absoluteY="16dp" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/ibtn_main_shangjia"
-            android:layout_alignLeft="@+id/ibtn_main_shangjia"
-            android:layout_alignRight="@+id/ibtn_main_shangjia"
-            android:layout_alignStart="@+id/ibtn_main_shangjia"
-            android:layout_below="@+id/ibtn_main_shangjia"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="上架"
-            android:textSize="18sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="入库"
+                    android:textSize="18sp" />
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
 
-    </RelativeLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toShangjia"
+                    android:src="@drawable/shangjia"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="上架"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toStart"
+                    android:src="@drawable/chuku"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="出库"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toStart"
+                    android:src="@drawable/fenjian"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="分拣"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toStart"
+                    android:src="@drawable/renwudan"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="任务单"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toStart"
+                    android:src="@drawable/pandian"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="盘点"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+            </LinearLayout>
+
+            
+            
+            
+            
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toStart"
+                    android:src="@drawable/caitui"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="采购单退回"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toStart"
+                    android:src="@drawable/xiaotui"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="销售单退回"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="15dp"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:onClick="toStart"
+                    android:src="@drawable/yushou"
+                    tools:layout_editor_absoluteY="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="预售退回"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"></LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+    </LinearLayout>
 
 
 </FrameLayout>

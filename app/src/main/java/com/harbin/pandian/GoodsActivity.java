@@ -2,12 +2,16 @@ package com.harbin.pandian;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -382,7 +386,7 @@ public class GoodsActivity extends ShangjiaActivity {
                 rack_code = s_name2code_Map.get(rackName[position]);
                 sp_rack_code.setSelection(Arrays.asList(rackCode).indexOf(rack_code));
 //                if (position == 1){
-//                    Log.d("info: ", "alert changed loc_code");
+//                    LogFragment.d("info: ", "alert changed loc_code");
 //                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
 //                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 //                        @Override
@@ -415,4 +419,33 @@ public class GoodsActivity extends ShangjiaActivity {
         });
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(context);
+            }
+            builder.setTitle("系统提示")
+                    .setMessage("所有更改将会丢失，确定直接退出吗？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 }

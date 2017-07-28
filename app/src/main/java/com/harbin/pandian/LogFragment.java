@@ -13,22 +13,20 @@ import android.view.animation.AnimationUtils;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link } interface
+ * {@link LogFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
+ * Use the {@link LogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment {
-
-
+public class LogFragment extends Fragment {
     private Context context;
 
-    public MainFragment() {
+    public LogFragment() {
         // Required empty public constructor
     }
 
-    public static MainFragment newInstance() {
-        MainFragment fragment = new MainFragment();
+    public static LogFragment newInstance() {
+        LogFragment fragment = new LogFragment();
         return fragment;
     }
 
@@ -42,18 +40,12 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_main, container, false);
+        View view =  inflater.inflate(R.layout.fragment_log, container, false);
 
 
         this.context = view.getContext();
 
         return view;
-    }
-
-    public void toStart(View view){
-        view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_click));
-        Intent intent = new Intent(context, BasicInfo.class);
-        startActivity(intent);
     }
 
 

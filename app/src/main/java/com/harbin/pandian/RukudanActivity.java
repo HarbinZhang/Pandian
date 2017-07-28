@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -134,7 +136,7 @@ public class RukudanActivity extends AppCompatActivity {
 ////            mRecyclerView.setAdapter(mAdapter);
 //
 //        }catch (Exception e){
-//            Log.e("Error in Json parse:", e.getMessage());
+//            LogFragment.e("Error in Json parse:", e.getMessage());
 //        }
 
         Cursor cursor = getAllGoods();
@@ -417,5 +419,36 @@ public class RukudanActivity extends AppCompatActivity {
 
         return false;
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(context);
+            }
+            builder.setTitle("系统提示")
+                    .setMessage("仍有未提交的明细，确定直接退出吗？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 }
