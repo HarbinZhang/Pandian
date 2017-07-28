@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
+import static com.harbin.pandian.MainActivity.scanDecode;
 
 
 public class AccountFragment extends Fragment {
@@ -19,6 +19,8 @@ public class AccountFragment extends Fragment {
     private SharedPreferences.Editor editor;
 
     private Button btn_sign_out;
+
+
     public AccountFragment() {
         // Required empty public constructor
     }
@@ -43,10 +45,12 @@ public class AccountFragment extends Fragment {
         editor = prefs.edit();
 
 
+
         final View.OnClickListener mClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new IntentIntegrator(getActivity()).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+//                new IntentIntegrator(getActivity()).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+                scanDecode.starScan();
             }
         };
 
@@ -66,6 +70,8 @@ public class AccountFragment extends Fragment {
             btn_sign_out.setText("扫码登录");
             btn_sign_out.setOnClickListener(mClickListener);
         }
+
+
 
 
         return view;

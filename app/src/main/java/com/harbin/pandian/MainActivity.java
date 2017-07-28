@@ -27,8 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.scandecode.ScanDecode;
+import com.scandecode.inf.ScanInterface;
 
 import org.json.JSONObject;
 
@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNav;
 
     private Fragment fragment;
+
+    public static ScanInterface scanDecode;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -107,6 +110,16 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.main_container, fragment).commit();
 
 
+        scanDecode = new ScanDecode(this);
+        scanDecode.initService("true");
+        scanDecode.getBarCode(new ScanInterface.OnScanListener() {
+            @Override
+            public void getBarcode(String s) {
+                dealWithResult(s);
+            }
+        });
+
+
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
         mBottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -124,7 +137,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void toLogin(){
-        new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+//        new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+        scanDecode.starScan();
     }
 
 
@@ -145,15 +159,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, final int resultCode, Intent data) {
-        final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+
+    protected void dealWithResult(final String result){
         if(result != null) {
-            if(result.getContents() == null) {
+            if(result.isEmpty()) {
                 Toast.makeText(this, "取消", Toast.LENGTH_SHORT).show();
             } else {
 //                loadingBar.show();
-                Toast.makeText(this, "扫描成功：" + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "扫描成功：" + result, Toast.LENGTH_LONG).show();
 
                 String url = "http://505185679.java.cdnjsp.wang/wms_service/user/getUser.do";
 
@@ -198,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                     protected Map<String, String > getParams()
                     {
                         Map<String, String>  params = new HashMap<String, String>();
-                        params.put("employee_code",result.getContents());
+                        params.put("employee_code",result);
 //                        params.put("employee_code_right", String.valueOf(1610024));
                         Log.d("params: ", params.toString());
                         return params;
@@ -206,13 +220,82 @@ public class MainActivity extends AppCompatActivity {
                 };
                 queue.add(postRequest);
 
-                editor.putString("account", result.getContents());
+                editor.putString("account", result);
                 editor.apply();
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+        }else{
+            Toast.makeText(this, "Something error in scanner", Toast.LENGTH_LONG).show();
         }
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, final int resultCode, Intent data) {
+//        final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+//        if(result != null) {
+//            if(result.getContents() == null) {
+//                Toast.makeText(this, "取消", Toast.LENGTH_SHORT).show();
+//            } else {
+////                loadingBar.show();
+//                Toast.makeText(this, "扫描成功：" + result.getContents(), Toast.LENGTH_LONG).show();
+//
+//                String url = "http://505185679.java.cdnjsp.wang/wms_service/user/getUser.do";
+//
+//                StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+//                        new Response.Listener<String>()
+//                        {
+//                            @Override
+//                            public void onResponse(String response) {
+//                                // response
+//                                Log.d("Response", response);
+//                                try {
+//                                    JSONObject obj = new JSONObject(response);
+////                                    int re = res.getInt("code");
+////                                    JSONObject obj = res.getJSONObject("result");
+//                                    if(obj.getInt("code")==0){
+////                                        loadingBar.hide();
+//                                        Toast.makeText(context, "登录失败: "+obj.getString("result"), Toast.LENGTH_SHORT).show();
+//                                    }else if(obj.getInt("code")==200){
+//                                        JSONObject userObj = new JSONObject(obj.getString("result"));
+//                                        editor.putString("account_info", userObj.toString());
+//                                        editor.putBoolean("login_status", true);
+//                                        editor.apply();
+////                                        loadingBar.hide();
+//                                        mBottomNav.setSelectedItemId(R.id.navigation_home);
+//                                        Toast.makeText(context, "登录成功： 欢迎 " + userObj.getString("user_name"), Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }catch (Exception e){
+//                                    Log.e("Error", e.getMessage());
+//                                }
+//                            }
+//                        },
+//                        new Response.ErrorListener()
+//                        {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//                                // error
+//                                Log.d("Error.Response", error.getMessage());
+//                            }
+//                        }
+//                ) {
+//                    @Override
+//                    protected Map<String, String > getParams()
+//                    {
+//                        Map<String, String>  params = new HashMap<String, String>();
+//                        params.put("employee_code",result.getContents());
+////                        params.put("employee_code_right", String.valueOf(1610024));
+//                        Log.d("params: ", params.toString());
+//                        return params;
+//                    }
+//                };
+//                queue.add(postRequest);
+//
+//                editor.putString("account", result.getContents());
+//                editor.apply();
+//            }
+//        } else {
+//            super.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
 
 
     private void loginAlert(Context context){
@@ -242,6 +325,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        scanDecode.onDestroy();
+    }
 }

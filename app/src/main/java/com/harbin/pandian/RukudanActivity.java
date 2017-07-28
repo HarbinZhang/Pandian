@@ -36,6 +36,8 @@ import com.harbin.pandian.database.GoodsContract;
 import com.harbin.pandian.database.GoodsDbHelper;
 import com.harbin.pandian.database.RukuListContract;
 import com.harbin.pandian.database.RukuListDbHelper;
+import com.scandecode.ScanDecode;
+import com.scandecode.inf.ScanInterface;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -75,6 +77,10 @@ public class RukudanActivity extends AppCompatActivity {
 
     String ticket_id;
 
+
+    private ScanInterface scanDecode;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +102,9 @@ public class RukudanActivity extends AppCompatActivity {
         tv_loc_code = (TextView) findViewById(R.id.tv_rukudan_loc_code);
 
         context = this;
+
+        scanDecode = new ScanDecode(this);
+        scanDecode.initService("true");
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -291,7 +300,8 @@ public class RukudanActivity extends AppCompatActivity {
 
     public void startScan(View view){
 //            new IntentIntegrator(this).setOrientationLocked(false).initiateScan();
-        new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+//        new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+        scanDecode.starScan();
     }
 
 
@@ -451,4 +461,9 @@ public class RukudanActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        scanDecode.onDestroy();
+    }
 }
