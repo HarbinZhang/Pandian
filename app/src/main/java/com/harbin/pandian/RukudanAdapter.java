@@ -165,6 +165,24 @@ public class RukudanAdapter extends RecyclerView.Adapter<RukudanAdapter.ViewHold
                 final String loc_name = prefs.getString("curt_loc_name", null);
 
 
+
+                if(loc_name == null){
+                    intent.putExtra("loc_name", "");
+                }else{
+//                    detail = new CheckInDetail(id, quantity, unit, loc_code, loc_name, certificate);
+                    intent.putExtra("loc_name", loc_name);
+                }
+
+                intent.putExtra("id", id);
+                intent.putExtra("quantity", quantity);
+                intent.putExtra("unit", unit);
+                intent.putExtra("loc_code", loc_code);
+                intent.putExtra("certificate", certificate);
+                intent.putExtra("name", name);
+                intent.putExtra("sqlId", sqlId);
+
+
+
                 if (loc_code == null){
                     AlertDialog.Builder builder;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -176,21 +194,6 @@ public class RukudanAdapter extends RecyclerView.Adapter<RukudanAdapter.ViewHold
                             .setMessage("确定继续吗？")
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if(loc_name == null){
-                                        intent.putExtra("loc_name", "");
-                                    }else{
-//                    detail = new CheckInDetail(id, quantity, unit, loc_code, loc_name, certificate);
-                                        intent.putExtra("loc_name", loc_name);
-                                    }
-
-                                    intent.putExtra("id", id);
-                                    intent.putExtra("quantity", quantity);
-                                    intent.putExtra("unit", unit);
-                                    intent.putExtra("loc_code", loc_code);
-                                    intent.putExtra("certificate", certificate);
-                                    intent.putExtra("name", name);
-                                    intent.putExtra("sqlId", sqlId);
-
 
                                     context.startActivity(intent);
                                 }
@@ -203,6 +206,8 @@ public class RukudanAdapter extends RecyclerView.Adapter<RukudanAdapter.ViewHold
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
+                }else{
+                    context.startActivity(intent);
                 }
 
 
