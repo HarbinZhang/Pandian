@@ -336,6 +336,12 @@ public class GoodsActivity extends ShangjiaActivity {
                             rackCode = s_code2name_Map.keySet().toArray(new String[s_code2name_Map.size()]);
                             setRacksName();
                             setRacksCode();
+
+                            String scanned_loc_code = getIntent().getStringExtra("loc_code");
+                            if(s_code2name_Map.containsKey(scanned_loc_code)){
+                                sp_rack_code.setSelection(Arrays.asList(rackCode).indexOf(scanned_loc_code));
+                            }
+
                             loadingBar.hide();
                         }catch (Exception e){
                             Log.e("Error: ",e.getMessage());

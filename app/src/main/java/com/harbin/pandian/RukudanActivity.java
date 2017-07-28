@@ -3,7 +3,6 @@ package com.harbin.pandian;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -30,8 +29,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.harbin.pandian.database.GoodsContract;
 import com.harbin.pandian.database.GoodsDbHelper;
 import com.harbin.pandian.database.RukuListContract;
@@ -80,7 +77,6 @@ public class RukudanActivity extends AppCompatActivity {
 
     private ScanInterface scanDecode;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +90,18 @@ public class RukudanActivity extends AppCompatActivity {
         loadingBar = (ContentLoadingProgressBar) findViewById(R.id.loading_rukudan);
         loadingBar.show();
 
+        scanDecode = new ScanDecode(this);
+        scanDecode.initService("true");
+        scanDecode.getBarCode(new ScanInterface.OnScanListener() {
+            @Override
+            public void getBarcode(String s) {
+                getResult(s);
+            }
+        });
+
         queue = Volley.newRequestQueue(this);
+
+        initStorage();
 
         ticket_id = getIntent().getStringExtra("rukudan");
         getDetail(ticket_id);
@@ -102,9 +109,6 @@ public class RukudanActivity extends AppCompatActivity {
         tv_loc_code = (TextView) findViewById(R.id.tv_rukudan_loc_code);
 
         context = this;
-
-        scanDecode = new ScanDecode(this);
-        scanDecode.initService("true");
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -158,7 +162,7 @@ public class RukudanActivity extends AppCompatActivity {
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            rukudan_submit();
+                rukudan_submit();
             }
         });
 
@@ -310,24 +314,23 @@ public class RukudanActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, final int resultCode, Intent data) {
-        final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+    private void getResult(final String result){
         if(result != null) {
-            if(result.getContents() == null) {
+            if(result == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                String loc_code = result.getContents();
+                Toast.makeText(this, "Scanned: " + result, Toast.LENGTH_LONG).show();
+                String loc_code = result;
                 if (!s_code2name_Map.containsKey(loc_code)){
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            editor.putString("scanned_loc_code", result.getContents());
+                            editor.putString("scanned_loc_code", result);
                             editor.putString("curt_loc_name", null);
                             editor.apply();
-                            tv_loc_code.setText("货架编码："+result.getContents());
+                            tv_loc_code.setText("货架编码："+result);
                         }
                     });
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -342,18 +345,61 @@ public class RukudanActivity extends AppCompatActivity {
                     dialog.setMessage("确定添加当前货架编码吗？");
                     dialog.show();
                 }else{
-                    editor.putString("scanned_loc_code", result.getContents());
+                    editor.putString("scanned_loc_code", result);
                     editor.putString("curt_loc_name", s_code2name_Map.get(loc_code));
                     editor.apply();
-                    tv_loc_code.setText("货架编码："+result.getContents());
+                    tv_loc_code.setText("货架编码："+result);
                 }
 
 
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, final int resultCode, Intent data) {
+//        final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+//        if(result != null) {
+//            if(result.getContents() == null) {
+//                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+//                String loc_code = result.getContents();
+//                if (!s_code2name_Map.containsKey(loc_code)){
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            editor.putString("scanned_loc_code", result.getContents());
+//                            editor.putString("curt_loc_name", null);
+//                            editor.apply();
+//                            tv_loc_code.setText("货架编码："+result.getContents());
+//                        }
+//                    });
+//                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            return ;
+//                        }
+//                    });
+//
+//                    AlertDialog dialog = builder.create();
+//                    dialog.setTitle("货架编码不存在");
+//                    dialog.setMessage("确定添加当前货架编码吗？");
+//                    dialog.show();
+//                }else{
+//                    editor.putString("scanned_loc_code", result.getContents());
+//                    editor.putString("curt_loc_name", s_code2name_Map.get(loc_code));
+//                    editor.apply();
+//                    tv_loc_code.setText("货架编码："+result.getContents());
+//                }
+//
+//
+//            }
+//        } else {
+//            super.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
 
 
     private void initStorage(){

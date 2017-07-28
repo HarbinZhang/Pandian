@@ -1,12 +1,15 @@
 package com.harbin.pandian;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -84,7 +87,7 @@ public class RukudanAdapter extends RecyclerView.Adapter<RukudanAdapter.ViewHold
     // Create new views (invoked by the layout manager)
     @Override
     public RukudanAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                         int viewType) {
+                                                        int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_rukudan_adapter, parent, false);
@@ -155,35 +158,55 @@ public class RukudanAdapter extends RecyclerView.Adapter<RukudanAdapter.ViewHold
         holder.cv_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, GoodsActivity.class);
+                final Intent intent = new Intent(context, GoodsActivity.class);
 
 
-                String loc_code = prefs.getString("scanned_loc_code",null);
-                String loc_name = prefs.getString("curt_loc_name", null);
+                final String loc_code = prefs.getString("scanned_loc_code",null);
+                final String loc_name = prefs.getString("curt_loc_name", null);
 
 
-//                if (loc_code == null){
-//                    Toast.makeText(v.getContext(), "请先锁定货架", Toast.LENGTH_SHORT).show();
-//                    return ;
-//                }else if(loc_name == null){
-//                    detail = new CheckInDetail(id, quantity, unit, loc_code, "", certificate);
-
-                if(loc_name == null){
-                    intent.putExtra("loc_name", "");
-                }else{
+                if (loc_code == null){
+                    AlertDialog.Builder builder;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                    } else {
+                        builder = new AlertDialog.Builder(context);
+                    }
+                    builder.setTitle("货架未锁定")
+                            .setMessage("确定继续吗？")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if(loc_name == null){
+                                        intent.putExtra("loc_name", "");
+                                    }else{
 //                    detail = new CheckInDetail(id, quantity, unit, loc_code, loc_name, certificate);
-                    intent.putExtra("loc_name", loc_name);
+                                        intent.putExtra("loc_name", loc_name);
+                                    }
+
+                                    intent.putExtra("id", id);
+                                    intent.putExtra("quantity", quantity);
+                                    intent.putExtra("unit", unit);
+                                    intent.putExtra("loc_code", loc_code);
+                                    intent.putExtra("certificate", certificate);
+                                    intent.putExtra("name", name);
+                                    intent.putExtra("sqlId", sqlId);
+
+
+                                    context.startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                    return;
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 }
 
-                intent.putExtra("id", id);
-                intent.putExtra("quantity", quantity);
-                intent.putExtra("unit", unit);
-                intent.putExtra("loc_code", loc_code);
-                intent.putExtra("certificate", certificate);
-                intent.putExtra("name", name);
-                intent.putExtra("sqlId", sqlId);
 
-                context.startActivity(intent);
+
             }
         });
 
