@@ -130,8 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void toShangjia(View view){
-//        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.image_click));
-//        startActivity(new Intent(this, RukuListActivity.class));
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.image_click));
 //        return;
 
         if(prefs.getBoolean("login_status", false)){
